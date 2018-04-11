@@ -10,8 +10,16 @@ import globalV
 from loadData import loadData
 from attribute import attribute
 from classify import classify
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+# For plotting
+import plotly.plotly as py
+import plotly.graph_objs as go
+# py.sign_in('krittaphat.pug', 'oVTAbkhd2RQvodGOwrwp') # G-mail link
+py.sign_in('amps1', 'Z1KAk8xiPUyO2U58JV2K') # kpugdeet@syr.edu/12345678
+# py.sign_in('amps2', 'jGQHMBArdACog36YYCAI') # yli41@syr.edu/12345678
+# py.sign_in('amps3', '5geLaNJlswmzDucmKikR') # liyilan0120@gmail.com/12345678
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -197,78 +205,78 @@ if __name__ == "__main__":
             model = attribute()
         with g2.as_default():
             classifier = classify()
-        attTmp = model.getAttribute(trX30)
-        predY = classifier.predict(attTmp)
-        print('Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, trY30))*100))
-        attTmp = model.getAttribute(vX)
-        predY = classifier.predict(attTmp)
-        print('Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, vY)) * 100))
-        attTmp = model.getAttribute(teX)
-        predY = classifier.predict(attTmp)
-        print('Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, teY)) * 100))
-
-        # Euclidean distance
-        print('\nEuclidean')
-        attTmp = model.getAttribute(trX30)
-        predY = []
-        for pAtt in attTmp:
-            distance = []
-            for cAtt in concatAtt_D:
-                distance.append(spatial.distance.euclidean(pAtt, cAtt))
-            ind = np.argsort(distance)[:1]
-            predY.append(ind[0])
-        print('Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, trY30)) * 100))
-        attTmp = model.getAttribute(vX)
-        predY = []
-        for pAtt in attTmp:
-            distance = []
-            for cAtt in concatAtt_D:
-                distance.append(spatial.distance.euclidean(pAtt, cAtt))
-            ind = np.argsort(distance)[:1]
-            predY.append(ind[0])
-        print('Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, vY)) * 100))
-        attTmp = model.getAttribute(teX)
-        predY = []
-        for pAtt in attTmp:
-            distance = []
-            for cAtt in concatAtt_D:
-                distance.append(spatial.distance.euclidean(pAtt, cAtt))
-            ind = np.argsort(distance)[:1]
-            predY.append(ind[0])
-        print('Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, teY)) * 100))
-
-        # Top Accuracy
-        topAccList = [1, 3, 5, 7, 10]
-        for topAcc in topAccList:
-            print('\nTop {0} Accuracy'.format(topAcc))
-            tmpAtt = model.getAttribute(trX30)
-            tmpScore = classifier.predictScore(tmpAtt)
-            tmpSort = np.argsort(-tmpScore, axis=1)
-            tmpPred = tmpSort[:,:topAcc]
-            count = 0
-            for i, p in enumerate(tmpPred):
-                if trY30[i] in p:
-                    count += 1
-            print('Train Accuracy = {0:.4f}%'.format((count/trX30.shape[0])*100))
-            tmpAtt = model.getAttribute(vX)
-            tmpScore = classifier.predictScore(tmpAtt)
-            tmpSort = np.argsort(-tmpScore, axis=1)
-            tmpPred = tmpSort[:, :topAcc]
-            count1 = 0
-            for i, p in enumerate(tmpPred):
-                if vY[i] in p:
-                    count1 += 1
-            print('Val Accuracy = {0:.4f}%'.format((count1 / vX.shape[0]) * 100))
-            tmpAtt = model.getAttribute(teX)
-            tmpScore = classifier.predictScore(tmpAtt)
-            tmpSort = np.argsort(-tmpScore, axis=1)
-            tmpPred = tmpSort[:, :topAcc]
-            count2 = 0
-            for i, p in enumerate(tmpPred):
-                if teY[i] in p:
-                    count2 += 1
-            print('Test Accuracy = {0:.4f}%'.format((count2 / teX.shape[0]) * 100))
-            print('Average Accuracy = {0:.4f}%'.format(((count+count1+count2) / (trX30.shape[0]+vX.shape[0]+teX.shape[0])) * 100))
+        # attTmp = model.getAttribute(trX30)
+        # predY = classifier.predict(attTmp)
+        # print('Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, trY30))*100))
+        # attTmp = model.getAttribute(vX)
+        # predY = classifier.predict(attTmp)
+        # print('Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, vY)) * 100))
+        # attTmp = model.getAttribute(teX)
+        # predY = classifier.predict(attTmp)
+        # print('Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, teY)) * 100))
+        #
+        # # Euclidean distance
+        # print('\nEuclidean')
+        # attTmp = model.getAttribute(trX30)
+        # predY = []
+        # for pAtt in attTmp:
+        #     distance = []
+        #     for cAtt in concatAtt_D:
+        #         distance.append(spatial.distance.euclidean(pAtt, cAtt))
+        #     ind = np.argsort(distance)[:1]
+        #     predY.append(ind[0])
+        # print('Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, trY30)) * 100))
+        # attTmp = model.getAttribute(vX)
+        # predY = []
+        # for pAtt in attTmp:
+        #     distance = []
+        #     for cAtt in concatAtt_D:
+        #         distance.append(spatial.distance.euclidean(pAtt, cAtt))
+        #     ind = np.argsort(distance)[:1]
+        #     predY.append(ind[0])
+        # print('Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, vY)) * 100))
+        # attTmp = model.getAttribute(teX)
+        # predY = []
+        # for pAtt in attTmp:
+        #     distance = []
+        #     for cAtt in concatAtt_D:
+        #         distance.append(spatial.distance.euclidean(pAtt, cAtt))
+        #     ind = np.argsort(distance)[:1]
+        #     predY.append(ind[0])
+        # print('Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, teY)) * 100))
+        #
+        # # Top Accuracy
+        # topAccList = [1, 3, 5, 7, 10]
+        # for topAcc in topAccList:
+        #     print('\nTop {0} Accuracy'.format(topAcc))
+        #     tmpAtt = model.getAttribute(trX30)
+        #     tmpScore = classifier.predictScore(tmpAtt)
+        #     tmpSort = np.argsort(-tmpScore, axis=1)
+        #     tmpPred = tmpSort[:,:topAcc]
+        #     count = 0
+        #     for i, p in enumerate(tmpPred):
+        #         if trY30[i] in p:
+        #             count += 1
+        #     print('Train Accuracy = {0:.4f}%'.format((count/trX30.shape[0])*100))
+        #     tmpAtt = model.getAttribute(vX)
+        #     tmpScore = classifier.predictScore(tmpAtt)
+        #     tmpSort = np.argsort(-tmpScore, axis=1)
+        #     tmpPred = tmpSort[:, :topAcc]
+        #     count1 = 0
+        #     for i, p in enumerate(tmpPred):
+        #         if vY[i] in p:
+        #             count1 += 1
+        #     print('Val Accuracy = {0:.4f}%'.format((count1 / vX.shape[0]) * 100))
+        #     tmpAtt = model.getAttribute(teX)
+        #     tmpScore = classifier.predictScore(tmpAtt)
+        #     tmpSort = np.argsort(-tmpScore, axis=1)
+        #     tmpPred = tmpSort[:, :topAcc]
+        #     count2 = 0
+        #     for i, p in enumerate(tmpPred):
+        #         if teY[i] in p:
+        #             count2 += 1
+        #     print('Test Accuracy = {0:.4f}%'.format((count2 / teX.shape[0]) * 100))
+        #     print('Average Accuracy = {0:.4f}%'.format(((count+count1+count2) / (trX30.shape[0]+vX.shape[0]+teX.shape[0])) * 100))
 
         # Accuracy for each class and Confusion matrix
         confusion = []
@@ -289,6 +297,28 @@ if __name__ == "__main__":
             tmpCountEach = np.bincount(predY, minlength=32)
             tmpCountEach = np.array(tmpCountEach)/eachInputX.shape[0]
             confusion.append(tmpCountEach)
+
+            # Predict attribute for each class and plot
+            s = np.arange(eachInputX.shape[0])
+            np.random.shuffle(s)
+            eachInputX = eachInputX[s]
+            tmpPredAtt = model.getAttribute(eachInputX[:10])
+            tmpPredClass = ['' for x in range(tmpPredAtt.shape[0])]
+            top5Index = np.argsort(-tmpCountEach)[:5]
+            top5PredAtt = concatAtt_D[top5Index, :]
+            top5PredClass = [printClassName(x) for x in top5Index]
+            showAtt = np.concatenate((top5PredAtt, tmpPredAtt), axis=0)
+            showName = top5PredClass + tmpPredClass
+            trace = go.Heatmap(z = showAtt,
+                               y = showName)
+            data = [trace]
+            layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080,
+                               yaxis=dict(
+                                   ticktext = showName,
+                                   tickvals = np.arange(len(showName))))
+            fig = go.Figure(data=data, layout=layout)
+            py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '.png')
+
         # Loop each Validation class
         for z in range(15, 20):
             eachInputX = []
@@ -305,6 +335,27 @@ if __name__ == "__main__":
             tmpCountEach = np.bincount(predY, minlength=32)
             tmpCountEach = np.array(tmpCountEach) / eachInputX.shape[0]
             confusion.append(tmpCountEach)
+
+            # Predict attribute for each class and plot
+            s = np.arange(eachInputX.shape[0])
+            np.random.shuffle(s)
+            eachInputX = eachInputX[s]
+            tmpPredAtt = model.getAttribute(eachInputX[:10])
+            tmpPredClass = ['' for x in range(tmpPredAtt.shape[0])]
+            top5Index = np.argsort(-tmpCountEach)[:5]
+            top5PredAtt = concatAtt_D[top5Index, :]
+            top5PredClass = [printClassName(x) for x in top5Index]
+            showAtt = np.concatenate((top5PredAtt, tmpPredAtt), axis=0)
+            showName = top5PredClass + tmpPredClass
+            trace = go.Heatmap(z=showAtt,
+                               y=showName)
+            data = [trace]
+            layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080,
+                               yaxis=dict(
+                                   ticktext=showName,
+                                   tickvals=np.arange(len(showName))))
+            fig = go.Figure(data=data, layout=layout)
+            py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '.png')
         # Loop each Test class
         for z in range(20, 32):
             eachInputX = []
@@ -321,6 +372,28 @@ if __name__ == "__main__":
             tmpCountEach = np.bincount(predY, minlength=32)
             tmpCountEach = np.array(tmpCountEach) / eachInputX.shape[0]
             confusion.append(tmpCountEach)
+
+            # Predict attribute for each class and plot
+            s = np.arange(eachInputX.shape[0])
+            np.random.shuffle(s)
+            eachInputX = eachInputX[s]
+            tmpPredAtt = model.getAttribute(eachInputX[:10])
+            tmpPredClass = ['' for x in range(tmpPredAtt.shape[0])]
+            top5Index = np.argsort(-tmpCountEach)[:5]
+            top5PredAtt = concatAtt_D[top5Index, :]
+            top5PredClass = [printClassName(x) for x in top5Index]
+            showAtt = np.concatenate((top5PredAtt, tmpPredAtt), axis=0)
+            showName = top5PredClass + tmpPredClass
+            trace = go.Heatmap(z=showAtt,
+                               y=showName)
+            data = [trace]
+            layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080,
+                               yaxis=dict(
+                                   ticktext=showName,
+                                   tickvals=np.arange(len(showName))))
+            fig = go.Figure(data=data, layout=layout)
+            py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '.png')
+
         confusion = np.array(confusion)
 
         # Save sorting output
@@ -358,8 +431,6 @@ if __name__ == "__main__":
         # plt.clf()
         #
         # Check Attribute Heat map
-        import plotly.plotly as py
-        import plotly.graph_objs as go
         # py.sign_in('krittaphat.pug', 'oVTAbkhd2RQvodGOwrwp')
         # trace = go.Heatmap(z = a,
         #                    # x = allClassAttName,
@@ -383,7 +454,6 @@ if __name__ == "__main__":
 
         # Confusion Matrix
         tmpClassName = [printClassName(x) for x in range(globalV.FLAGS.numClass)]
-        py.sign_in('krittaphat.pug', 'oVTAbkhd2RQvodGOwrwp')
         trace = go.Heatmap(z = confusion,
                            x = tmpClassName,
                            y = tmpClassName)
