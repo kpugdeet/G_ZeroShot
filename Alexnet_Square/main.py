@@ -301,7 +301,9 @@ if __name__ == "__main__":
                     showName = [printClassName(z)] + top5PredClass + tmpPredClass
                     trace = go.Heatmap(z = showAtt,
                                        x = allClassAttName,
-                                       y = showName)
+                                       y = showName,
+                                       zmax = 1.0,
+                                       zmin = 0.0)
                     data = [trace]
                     layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080,
                                        yaxis=dict(
@@ -347,7 +349,10 @@ if __name__ == "__main__":
                     showName = [printClassName(z)] + top5PredClass + tmpPredClass
                     trace = go.Heatmap(z=showAtt,
                                        x=allClassAttName,
-                                       y=showName)
+                                       y=showName,
+                                       zmax=1.0,
+                                       zmin=0.0
+                                       )
                     data = [trace]
                     layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080,
                                        yaxis=dict(
@@ -393,7 +398,10 @@ if __name__ == "__main__":
                     showName = [printClassName(z)] + top5PredClass + tmpPredClass
                     trace = go.Heatmap(z=showAtt,
                                        x=allClassAttName,
-                                       y=showName)
+                                       y=showName,
+                                       zmax=1.0,
+                                       zmin=0.0
+                                       )
                     data = [trace]
                     layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080,
                                        yaxis=dict(
@@ -407,7 +415,10 @@ if __name__ == "__main__":
             tmpClassName = [printClassName(x) for x in range(globalV.FLAGS.numClass)]
             trace = go.Heatmap(z=confusion,
                                x=tmpClassName,
-                               y=tmpClassName)
+                               y=tmpClassName,
+                               zmax=1.0,
+                               zmin=0.0
+                               )
             data = [trace]
             layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080,
                                yaxis=dict(
@@ -454,7 +465,10 @@ if __name__ == "__main__":
         # Check Classes Heat map
         trace = go.Heatmap(z = concatAtt_D,
                            x = allClassAttName,
-                           y = allClassName)
+                           y = allClassName,
+                           zmax=1.0,
+                           zmin=0.0
+                           )
         data = [trace]
         layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080)
         fig = go.Figure(data=data, layout=layout)
