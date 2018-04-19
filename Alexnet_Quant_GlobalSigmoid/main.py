@@ -329,7 +329,7 @@ if __name__ == "__main__":
                                            ticktext=showName,
                                            tickvals=np.arange(len(showName))))
                     fig = go.Figure(data=data, layout=layout)
-                    py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '_Tr.png')
+                    # py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '_Tr.png')
 
             # Loop each Validation class
             for z in range(15, 20):
@@ -378,7 +378,7 @@ if __name__ == "__main__":
                                            ticktext=showName,
                                            tickvals=np.arange(len(showName))))
                     fig = go.Figure(data=data, layout=layout)
-                    py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '_V.png')
+                    # py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '_V.png')
 
             # Loop each Test class
             for z in range(20, 32):
@@ -427,13 +427,13 @@ if __name__ == "__main__":
                                            ticktext=showName,
                                            tickvals=np.arange(len(showName))))
                     fig = go.Figure(data=data, layout=layout)
-                    py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '_Te.png')
+                    # py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_' + printClassName(z) + '_Te.png')
 
             confusion = np.array(confusion)
             # Confusion Matrix
             tmpClassName = [printClassName(x) for x in range(globalV.FLAGS.numClass)]
             trace = go.Heatmap(z=confusion,
-                               # x=tmpClassName,
+                               x=tmpClassName,
                                y=tmpClassName,
                                zmax=1.0,
                                zmin=0.0
@@ -491,7 +491,7 @@ if __name__ == "__main__":
         data = [trace]
         layout = go.Layout(title=globalV.FLAGS.KEY, width=1920, height=1080)
         fig = go.Figure(data=data, layout=layout)
-        py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_Heat.png')
+        # py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_Heat.png')
 
 
 
