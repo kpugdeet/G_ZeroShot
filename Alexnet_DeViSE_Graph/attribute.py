@@ -10,9 +10,8 @@ class attribute (object):
         self.x = tf.placeholder(tf.float32, name='inputImage', shape=[None, globalV.FLAGS.height, globalV.FLAGS.width, 3])
         self.ySeen = tf.placeholder(tf.int64, name='outputClassIndexSeen', shape=[None])
         self.attYSeen = tf.placeholder(tf.float32, name='outputClassAttSeen', shape=[None, globalV.FLAGS.numAtt])
-        self.yUnseen = tf.placeholder(tf.int64, name='outputClassIndexUnseen', shape=[None])
-        self.attYUnseen = tf.placeholder(tf.float32, name='outputClassAttUnseen', shape=[None, globalV.FLAGS.numAtt])
         self.isTraining = tf.placeholder(tf.bool)
+        self.allClassAtt = tf.placeholder(tf.float32, name='allClassAtt', shape=[None, globalV.FLAGS.numAtt])
 
         # Transform feature to same size as attribute (Linear compatibility)
         with tf.variable_scope("attribute"):
@@ -32,9 +31,29 @@ class attribute (object):
         self.outAtt = tf.add(tf.matmul(hiddenF, self.wH_A), bH_A)
         self.outAttSig = tf.sigmoid(self.outAtt)
 
-        # Loss
-        # self.totalLoss = tf.reduce_mean(tf.squared_difference(self.attYSeen, self.outAttSig))
-        self.totalLoss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=self.attYSeen, logits=self.outAtt))
+        # Dot-Product similarity loss for seen class
+        # Denominator (|A||B|)
+        imageValue = tf.expand_dims(tf.reduce_sum(tf.square(self.outAttSig), axis=1), axis=1)
+        classValue = tf.expand_dims(tf.reduce_sum(tf.square(self.allClassAtt), axis=1), axis=0)
+        prodValue = tf.multiply(imageValue, classValue)
+        # Numerator (A.B)
+        imageFeatures = tf.expand_dims(self.outAttSig, axis=1)
+        self.dotProduct = tf.reduce_sum(tf.multiply(imageFeatures, self.allClassAtt), axis=2)
+        # (A.B)/(|A||B|)
+        # self.dotProduct = tf.divide(self.dotProduct, prodValue)
+
+        # Cost Function
+        correctClass = tf.tile(tf.reduce_sum(tf.multiply(self.dotProduct, tf.one_hot(self.ySeen, tf.shape(self.allClassAtt)[0])), axis=1, keep_dims=True), [1, tf.shape(self.allClassAtt)[0]])
+        cost = 1.0 - correctClass + self.dotProduct
+        cost = tf.maximum(cost, 0.0)
+        cost = tf.multiply(cost, tf.one_hot(self.ySeen, tf.shape(self.allClassAtt)[0], on_value=0.0, off_value=1.0))
+        cost = tf.reduce_sum(cost, axis=1)
+        self.totalLoss = tf.reduce_mean(cost)
+
+        # Predict Index
+        self.predictIndex = tf.argmax(self.dotProduct, 1)
+
+        self.predictScore = self.dotProduct
 
         # Define Optimizer
         updateOps = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
@@ -76,7 +95,7 @@ class attribute (object):
         self.Start = npzFile['Start']
         self.Check = npzFile['Check']
 
-    def trainAtt(self, seenX, seenAttY, unseenX, unseenAttY, unseenX2, unseenAttY2):
+    def trainAtt(self, seenX, seenAttY, unseenX, unseenAttY, unseenX2, unseenAttY2, trainAtt, vAtt, teAtt):
         for i in range(self.Start, globalV.FLAGS.maxSteps + 1):
             print('Loop {0}/{1}'.format(i, globalV.FLAGS.maxSteps))
 
@@ -91,7 +110,7 @@ class attribute (object):
             for j in range(0, seenX.shape[0], globalV.FLAGS.batchSize):
                 xBatchSeen = seenX[j:j + globalV.FLAGS.batchSize]
                 attYBatchSeen = seenAttY[j:j + globalV.FLAGS.batchSize]
-                trainLoss, _ = self.sess.run([self.totalLoss ,self.trainStep], feed_dict={self.x: xBatchSeen, self.attYSeen: attYBatchSeen, self.isTraining: 1})
+                trainLoss, _ = self.sess.run([self.totalLoss ,self.trainStep], feed_dict={self.x: xBatchSeen, self.ySeen: attYBatchSeen, self.allClassAtt: trainAtt, self.isTraining: 1})
                 losses.append(trainLoss)
 
             feed = {self.averageL: sum(losses) / len(losses)}
@@ -103,7 +122,7 @@ class attribute (object):
             for j in range(0, unseenX.shape[0], globalV.FLAGS.batchSize):
                 xBatch = unseenX[j:j + globalV.FLAGS.batchSize]
                 attYBatch = unseenAttY[j:j + globalV.FLAGS.batchSize]
-                valLoss = self.sess.run(self.totalLoss, feed_dict={self.x: xBatch, self.attYSeen: attYBatch, self.isTraining: 0})
+                valLoss = self.sess.run(self.totalLoss, feed_dict={self.x: xBatch, self.ySeen: attYBatch, self.allClassAtt: vAtt, self.isTraining: 0})
                 losses.append(valLoss)
             feed = {self.averageL: sum(losses) / len(losses)}
             summary = self.sess.run(self.merged, feed_dict=feed)
@@ -114,7 +133,7 @@ class attribute (object):
             for j in range(0, unseenX2.shape[0], globalV.FLAGS.batchSize):
                 xBatch = unseenX2[j:j + globalV.FLAGS.batchSize]
                 attYBatch = unseenAttY2[j:j + globalV.FLAGS.batchSize]
-                valLoss = self.sess.run(self.totalLoss, feed_dict={self.x: xBatch, self.attYSeen: attYBatch, self.isTraining: 0})
+                valLoss = self.sess.run(self.totalLoss, feed_dict={self.x: xBatch, self.ySeen: attYBatch, self.allClassAtt: teAtt, self.isTraining: 0})
                 losses.append(valLoss)
             feed = {self.averageL: sum(losses) / len(losses)}
             summary = self.sess.run(self.merged, feed_dict=feed)
@@ -138,6 +157,26 @@ class attribute (object):
                 outputAtt = self.sess.run(self.outAttSig, feed_dict={self.x: xBatch, self.isTraining: 0})
             else:
                 outputAtt = np.concatenate((outputAtt, self.sess.run(self.outAttSig, feed_dict={self.x: xBatch, self.isTraining: 0})), axis=0)
+        return outputAtt
+
+    def getClassIndex(self, trainX, allClassAtt):
+        outputAtt = None
+        for j in range(0, trainX.shape[0], globalV.FLAGS.batchSize):
+            xBatch = trainX[j:j + globalV.FLAGS.batchSize]
+            if outputAtt is None:
+                outputAtt = self.sess.run(self.predictIndex, feed_dict={self.x: xBatch, self.allClassAtt: allClassAtt, self.isTraining: 0})
+            else:
+                outputAtt = np.concatenate((outputAtt, self.sess.run(self.predictIndex, feed_dict={self.x: xBatch, self.allClassAtt: allClassAtt, self.isTraining: 0})), axis=0)
+        return outputAtt
+
+    def getScore(self, trainX, allClassAtt):
+        outputAtt = None
+        for j in range(0, trainX.shape[0], globalV.FLAGS.batchSize):
+            xBatch = trainX[j:j + globalV.FLAGS.batchSize]
+            if outputAtt is None:
+                outputAtt = self.sess.run(self.predictScore, feed_dict={self.x: xBatch, self.allClassAtt: allClassAtt, self.isTraining: 0})
+            else:
+                outputAtt = np.concatenate((outputAtt, self.sess.run(self.predictScore, feed_dict={self.x: xBatch, self.allClassAtt: allClassAtt, self.isTraining: 0})), axis=0)
         return outputAtt
 
     def getLastWeight(self):

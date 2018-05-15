@@ -252,6 +252,7 @@ class loadData(object):
         trainClass = ['person', 'statue', 'car', 'aeroplane', 'cat', 'zebra', 'sheep', 'bicycle', 'bottle', 'sofa', 'carriage', 'bird', 'pottedplant', 'tvmonitor', 'building']
         valClass = ['centaur', 'train', 'donkey', 'jetski', 'diningtable']
         testClass = ['monkey', 'bus', 'wolf', 'dog', 'horse', 'cow', 'motorbike', 'mug', 'chair', 'boat', 'bag', 'goat']
+        # K-Cluster
         # trainClass = ['person', 'statue', 'monkey', 'aeroplane', 'cat', 'zebra', 'sheep', 'bicycle', 'chair', 'sofa', 'carriage', 'bird', 'pottedplant', 'tvmonitor', 'jetski']
         # valClass = ['centaur', 'train', 'donkey', 'building', 'diningtable']
         # testClass = ['car', 'bus', 'wolf', 'dog', 'horse', 'cow', 'motorbike', 'mug', 'bottle', 'boat', 'bag', 'goat']

@@ -243,18 +243,12 @@ class loadData(object):
         with open(globalV.FLAGS.BASEDIR + globalV.FLAGS.APYPATH + 'class_names.txt', 'r') as f:
             allClass = [line.strip() for line in f]
 
-        # # Shuffle train/validation/test
-        # shuffle(allClass)
-        # trainClass = allClass[:15]
-        # valClass = allClass[15:20]
-        # testClass = allClass[20:]
-        # Choose Train and Test class
-        trainClass = ['person', 'statue', 'car', 'aeroplane', 'cat', 'zebra', 'sheep', 'bicycle', 'bottle', 'sofa', 'carriage', 'bird', 'pottedplant', 'tvmonitor', 'building']
-        valClass = ['centaur', 'train', 'donkey', 'jetski', 'diningtable']
-        testClass = ['monkey', 'bus', 'wolf', 'dog', 'horse', 'cow', 'motorbike', 'mug', 'chair', 'boat', 'bag', 'goat']
-        # trainClass = ['person', 'statue', 'monkey', 'aeroplane', 'cat', 'zebra', 'sheep', 'bicycle', 'chair', 'sofa', 'carriage', 'bird', 'pottedplant', 'tvmonitor', 'jetski']
-        # valClass = ['centaur', 'train', 'donkey', 'building', 'diningtable']
-        # testClass = ['car', 'bus', 'wolf', 'dog', 'horse', 'cow', 'motorbike', 'mug', 'bottle', 'boat', 'bag', 'goat']
+        # Shuffle train/validation/test
+        shuffle(allClass)
+        trainClass = allClass[:15]
+        valClass = allClass[15:20]
+        testClass = allClass[20:]
+
 
         # Read attribute value for each class
         trainAtt = [list() for _ in range(15)]
