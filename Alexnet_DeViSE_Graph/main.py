@@ -156,7 +156,8 @@ if __name__ == "__main__":
             if trainY[k] == z:
                 eachInputX.append(trainX[k])
                 eachInputY.append(trainY[k])
-                eachInputAtt.append(concatAtt_D[trainY[k]])
+                # eachInputAtt.append(concatAtt_D[trainY[k]])
+                eachInputAtt.append(trainYAtt[k])
         eachInputX = np.array(eachInputX)
         eachInputY = np.array(eachInputY)
         eachInputAtt = np.array(eachInputAtt)
@@ -215,7 +216,8 @@ if __name__ == "__main__":
     s = np.arange(valX.shape[0])
     tmp = list()
     for i in range(valY.shape[0]):
-        tmp.append(concatAtt_D[valY[i]+len(trainClass)])
+        # tmp.append(concatAtt_D[valY[i]+len(trainClass)])
+        tmp.append(valYAtt[i])
     vX = valX[s]
     vY = valY[s] + len(trainClass)
     vAtt = np.array(tmp)[s]
@@ -224,12 +226,13 @@ if __name__ == "__main__":
     s = np.arange(testX.shape[0])
     tmp = list()
     for i in range(testY.shape[0]):
-        tmp.append(concatAtt_D[testY[i]+len(trainClass)+len(valClass)])
+        # tmp.append(concatAtt_D[testY[i]+len(trainClass)+len(valClass)])
+        tmp.append(testYAtt[i])
     teX = testX[s]
     teY = testY[s] + len(trainClass) + len(valClass)
     teAtt = np.array(tmp)[s]
 
-    # Balance training class
+    # Balance testing class
     baTeX = None;
     baTeY = None;
     baTeAtt = None
@@ -292,6 +295,8 @@ if __name__ == "__main__":
         print('Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, vY)) * 100))
         predY = model.getClassIndex(teX, concatAtt_D)
         print('Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, teY)) * 100))
+        predY = model.getClassIndex(baTeX, concatAtt_D)
+        print('Balance Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, baTeY)) * 100))
 
         # Euclidean distance
         print('\nEuclidean')

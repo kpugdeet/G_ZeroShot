@@ -104,84 +104,84 @@ if __name__ == "__main__":
     else:
         concatAtt_D = combineAtt
 
-    # Quantization
-    bins = np.array([-1, 0.3, 0.6])
-    tmp_Q = np.digitize(concatAtt, bins, right=True)
-    tmp_Q = tmp_Q - 1
-    concatAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
-    for i in range(tmp_Q.shape[0]):
-        concatAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
-    concatAtt_D = concatAtt_D.reshape(tmp_Q.shape[0], -1)
-    # Fix Cat and Dog
-    tmpAdd = np.zeros(concatAtt_D.shape[0])
-    for i in range(concatAtt_D.shape[0]):
-        if printClassName(i) == 'cat':
-            tmpAdd[i] = 1
-        elif printClassName(i) == 'dog':
-            tmpAdd[i] = 0
-    tmpAdd = np.expand_dims(tmpAdd, axis=1)
-    concatAtt_D = np.hstack((concatAtt_D, tmpAdd))
-    print('\nNew attribute shape {0}'.format(concatAtt_D.shape))
-
-    # Quantization trainYAtt
-    bins = np.array([-1, 0.3, 0.6])
-    tmp_Q = np.digitize(trainYAtt, bins, right=True)
-    tmp_Q = tmp_Q - 1
-    trainAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
-    for i in range(tmp_Q.shape[0]):
-        trainAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
-    trainAtt_D = trainAtt_D.reshape(tmp_Q.shape[0], -1)
-    # Fix Cat and Dog
-    tmpAdd = np.zeros(trainAtt_D.shape[0])
-    for i in range(trainAtt_D.shape[0]):
-        if printClassName(trainY[i]) == 'cat':
-            tmpAdd[i] = 1
-        elif printClassName(trainY[i]) == 'dog':
-            tmpAdd[i] = 0
-    tmpAdd = np.expand_dims(tmpAdd, axis=1)
-    trainAtt_D = np.hstack((trainAtt_D, tmpAdd))
-    print('\nNew trainYAtt attribute shape {0}'.format(trainAtt_D.shape))
-    trainYAtt = trainAtt_D
-
-    # Quantization valYAtt
-    bins = np.array([-1, 0.3, 0.6])
-    tmp_Q = np.digitize(valYAtt, bins, right=True)
-    tmp_Q = tmp_Q - 1
-    valAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
-    for i in range(tmp_Q.shape[0]):
-        valAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
-    valAtt_D = valAtt_D.reshape(tmp_Q.shape[0], -1)
-    # Fix Cat and Dog
-    tmpAdd = np.zeros(valAtt_D.shape[0])
-    for i in range(valAtt_D.shape[0]):
-        if printClassName(valY[i]) == 'cat':
-            tmpAdd[i] = 1
-        elif printClassName(valY[i]) == 'dog':
-            tmpAdd[i] = 0
-    tmpAdd = np.expand_dims(tmpAdd, axis=1)
-    valAtt_D = np.hstack((valAtt_D, tmpAdd))
-    print('\nNew valYAtt attribute shape {0}'.format(valAtt_D.shape))
-    valYAtt = valAtt_D
-
-    # Quantization testYAtt
-    bins = np.array([-1, 0.3, 0.6])
-    tmp_Q = np.digitize(testYAtt, bins, right=True)
-    tmp_Q = tmp_Q - 1
-    testAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
-    for i in range(tmp_Q.shape[0]):
-        testAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
-    testAtt_D = testAtt_D.reshape(tmp_Q.shape[0], -1)
-    # Fix Cat and Dog
-    tmpAdd = np.zeros(testAtt_D.shape[0])
-    for i in range(testAtt_D.shape[0]):
-        if printClassName(testY[i]) == 'cat':
-            tmpAdd[i] = 1
-        elif printClassName(testY[i]) == 'dog':
-            tmpAdd[i] = 0
-    tmpAdd = np.expand_dims(tmpAdd, axis=1)
-    testAtt_D = np.hstack((testAtt_D, tmpAdd))
-    print('\nNew testYAtt attribute shape {0}'.format(testAtt_D.shape))
-    testYAtt = testAtt_D
+    # # Quantization
+    # bins = np.array([-1, 0.3, 0.6])
+    # tmp_Q = np.digitize(concatAtt, bins, right=True)
+    # tmp_Q = tmp_Q - 1
+    # concatAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
+    # for i in range(tmp_Q.shape[0]):
+    #     concatAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
+    # concatAtt_D = concatAtt_D.reshape(tmp_Q.shape[0], -1)
+    # # Fix Cat and Dog
+    # tmpAdd = np.zeros(concatAtt_D.shape[0])
+    # for i in range(concatAtt_D.shape[0]):
+    #     if printClassName(i) == 'cat':
+    #         tmpAdd[i] = 1
+    #     elif printClassName(i) == 'dog':
+    #         tmpAdd[i] = 0
+    # tmpAdd = np.expand_dims(tmpAdd, axis=1)
+    # concatAtt_D = np.hstack((concatAtt_D, tmpAdd))
+    # print('\nNew attribute shape {0}'.format(concatAtt_D.shape))
+    #
+    # # Quantization trainYAtt
+    # bins = np.array([-1, 0.3, 0.6])
+    # tmp_Q = np.digitize(trainYAtt, bins, right=True)
+    # tmp_Q = tmp_Q - 1
+    # trainAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
+    # for i in range(tmp_Q.shape[0]):
+    #     trainAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
+    # trainAtt_D = trainAtt_D.reshape(tmp_Q.shape[0], -1)
+    # # Fix Cat and Dog
+    # tmpAdd = np.zeros(trainAtt_D.shape[0])
+    # for i in range(trainAtt_D.shape[0]):
+    #     if printClassName(trainY[i]) == 'cat':
+    #         tmpAdd[i] = 1
+    #     elif printClassName(trainY[i]) == 'dog':
+    #         tmpAdd[i] = 0
+    # tmpAdd = np.expand_dims(tmpAdd, axis=1)
+    # trainAtt_D = np.hstack((trainAtt_D, tmpAdd))
+    # print('\nNew trainYAtt attribute shape {0}'.format(trainAtt_D.shape))
+    # trainYAtt = trainAtt_D
+    #
+    # # Quantization valYAtt
+    # bins = np.array([-1, 0.3, 0.6])
+    # tmp_Q = np.digitize(valYAtt, bins, right=True)
+    # tmp_Q = tmp_Q - 1
+    # valAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
+    # for i in range(tmp_Q.shape[0]):
+    #     valAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
+    # valAtt_D = valAtt_D.reshape(tmp_Q.shape[0], -1)
+    # # Fix Cat and Dog
+    # tmpAdd = np.zeros(valAtt_D.shape[0])
+    # for i in range(valAtt_D.shape[0]):
+    #     if printClassName(valY[i]) == 'cat':
+    #         tmpAdd[i] = 1
+    #     elif printClassName(valY[i]) == 'dog':
+    #         tmpAdd[i] = 0
+    # tmpAdd = np.expand_dims(tmpAdd, axis=1)
+    # valAtt_D = np.hstack((valAtt_D, tmpAdd))
+    # print('\nNew valYAtt attribute shape {0}'.format(valAtt_D.shape))
+    # valYAtt = valAtt_D
+    #
+    # # Quantization testYAtt
+    # bins = np.array([-1, 0.3, 0.6])
+    # tmp_Q = np.digitize(testYAtt, bins, right=True)
+    # tmp_Q = tmp_Q - 1
+    # testAtt_D = np.zeros((tmp_Q.shape[0], tmp_Q.shape[1], bins.shape[0]))
+    # for i in range(tmp_Q.shape[0]):
+    #     testAtt_D[i][np.arange(tmp_Q.shape[1]), tmp_Q[i]] = 1
+    # testAtt_D = testAtt_D.reshape(tmp_Q.shape[0], -1)
+    # # Fix Cat and Dog
+    # tmpAdd = np.zeros(testAtt_D.shape[0])
+    # for i in range(testAtt_D.shape[0]):
+    #     if printClassName(testY[i]) == 'cat':
+    #         tmpAdd[i] = 1
+    #     elif printClassName(testY[i]) == 'dog':
+    #         tmpAdd[i] = 0
+    # tmpAdd = np.expand_dims(tmpAdd, axis=1)
+    # testAtt_D = np.hstack((testAtt_D, tmpAdd))
+    # print('\nNew testYAtt attribute shape {0}'.format(testAtt_D.shape))
+    # testYAtt = testAtt_D
 
 
     # Check where there is some class that has same attributes
@@ -1326,3 +1326,155 @@ if __name__ == "__main__":
                                tickvals=np.arange(len(tmpClassName))))
         fig = go.Figure(data=data, layout=layout)
         # py.image.save_as(fig, filename=globalV.FLAGS.DIR + '_Confusion_Cluster' + '.png')
+
+    # Predict cluster index + classes
+    elif globalV.FLAGS.OPT == 9:
+        print('\nMode: 9 Predict Classes from cluster')
+
+        mapAll = [1, 1, 2, 2, 0, 0, 0, 3, 4, 6, 5, 7, 8, 9, 5, 1, 2, 0, 3, 5, 1, 2, 0, 0, 0, 0, 3, 4, 6, 5, 5, 0]
+
+        # Train Class Map
+        mapTrain = [1, 1, 2, 2, 0, 0, 0, 3, 4, 6, 5, 7, 8, 9, 5]
+        trYCluster70 = np.copy(trY70)
+        trYCluster30 = np.copy(trY30)
+        for i in range(trY70.shape[0]):
+            trYCluster70[i] = mapTrain[trY70[i]]
+        for i in range(trY30.shape[0]):
+            trYCluster30[i] = mapTrain[trY30[i]]
+
+        # Validation Class Map
+        mapVal = [1, 2, 0, 3, 5]
+        vYCluster = np.copy(vY)
+        for i in range(vY.shape[0]):
+            vYCluster[i] = mapVal[vY[i] - 15]
+
+        # Test Class Map
+        mapTest = [1, 2, 0, 0, 0, 0, 3, 4, 6, 5, 5, 0]
+        teYCluster = np.copy(teY)
+        for i in range(teY.shape[0]):
+            teYCluster[i] = mapTest[teY[i] - 20]
+
+        # Find cluster with Graph
+        returnIndex = [57, 11, 53, 12, 40, 51, 13, 43, 47, 52]
+        returnValue = [1, 7, 0, 8, 6, 3, 9, 4, 5, 2]
+
+        def FindCluster(att, pos):
+            if pos in returnIndex:
+                return returnValue[returnIndex.index(pos)]
+            else:
+                left = distanceFunc(tmpConcatAtt[treeMap[pos][0]], att)
+                right = distanceFunc(tmpConcatAtt[treeMap[pos][1]], att)
+                if left < right:
+                    return FindCluster(att, treeMap[pos][0])
+                else:
+                    return FindCluster(att, treeMap[pos][1])
+
+        g1 = tf.Graph()
+        g2 = tf.Graph()
+        with g1.as_default():
+            model = attribute()
+        with g2.as_default():
+            classifier = classify()
+
+        tmpAtt = model.getAttribute(trX30)
+        tmpScore = classifier.predictScore(tmpAtt)
+        tmpSort = np.argsort(-tmpScore, axis=1)
+        tmpPredCluster = []
+        for i in range(tmpAtt.shape[0]):
+            tmpPredCluster.append(FindCluster(tmpAtt[i], tmpConcatAtt.shape[0] - 1))
+        tmpPredCluster = np.array(tmpPredCluster)
+        countCorrect = 0
+        for i in range(tmpPredCluster.shape[0]):
+            if tmpPredCluster[i] == trYCluster30[i]:
+                countTop = 0
+                for j in range(tmpSort[i].shape[0]):
+                    if mapAll[tmpSort[i][j]] == trYCluster30[i]:
+                        countTop += 1
+                        if tmpSort[i][j] == trY30[i]:
+                            countCorrect += 1
+                            break
+                        if countTop == 1:
+                            break
+        print(countCorrect)
+        print(tmpPredCluster.shape[0])
+        print('Cluster Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, trYCluster30)) * 100))
+        print('Classes Train Accuracy = {0:.4f}%'.format((countCorrect/tmpPredCluster.shape[0])*100))
+        predY = classifier.predict(tmpAtt)
+        print('Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, trY30)) * 100))
+
+        tmpAtt = model.getAttribute(vX)
+        tmpScore = classifier.predictScore(tmpAtt)
+        tmpSort = np.argsort(-tmpScore, axis=1)
+        tmpPredCluster = []
+        for i in range(tmpAtt.shape[0]):
+            tmpPredCluster.append(FindCluster(tmpAtt[i], tmpConcatAtt.shape[0] - 1))
+        tmpPredCluster = np.array(tmpPredCluster)
+        countCorrect = 0
+        for i in range(tmpPredCluster.shape[0]):
+            if tmpPredCluster[i] == vYCluster[i]:
+                countTop = 0
+                for j in range(tmpSort[i].shape[0]):
+                    if mapAll[tmpSort[i][j]] == vYCluster[i]:
+                        countTop += 1
+                        if tmpSort[i][j] == vY[i]:
+                            countCorrect += 1
+                            break
+                        if countTop == 1:
+                            break
+        print(countCorrect)
+        print(tmpPredCluster.shape[0])
+        print('Cluster Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, vYCluster)) * 100))
+        print('Classes Val Accuracy = {0:.4f}%'.format((countCorrect / tmpPredCluster.shape[0]) * 100))
+        predY = classifier.predict(tmpAtt)
+        print('Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, vY)) * 100))
+
+        tmpAtt = model.getAttribute(teX)
+        tmpScore = classifier.predictScore(tmpAtt)
+        tmpSort = np.argsort(-tmpScore, axis=1)
+        tmpPredCluster = []
+        for i in range(tmpAtt.shape[0]):
+            tmpPredCluster.append(FindCluster(tmpAtt[i], tmpConcatAtt.shape[0] - 1))
+        tmpPredCluster = np.array(tmpPredCluster)
+        countCorrect = 0
+        for i in range(tmpPredCluster.shape[0]):
+            if tmpPredCluster[i] == teYCluster[i]:
+                countTop = 0
+                for j in range(tmpSort[i].shape[0]):
+                    if mapAll[tmpSort[i][j]] == teYCluster[i]:
+                        countTop += 1
+                        if tmpSort[i][j] == teY[i]:
+                            countCorrect += 1
+                            break
+                        if countTop == 1:
+                            break
+        print(countCorrect)
+        print(tmpPredCluster.shape[0])
+        print('Cluster Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, teYCluster)) * 100))
+        print('Classes Test Accuracy = {0:.4f}%'.format((countCorrect / tmpPredCluster.shape[0]) * 100))
+        predY = classifier.predict(tmpAtt)
+        print('Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, teY)) * 100))
+
+
+        # # Train Cluster
+        # attTmp = model.getAttribute(trX30)
+        # tmpPredCluster = []
+        # for i in range(attTmp.shape[0]):
+        #     tmpPredCluster.append(FindCluster(attTmp[i], tmpConcatAtt.shape[0] - 1))
+        # tmpPredCluster = np.array(tmpPredCluster)
+        # print('Cluster Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, trYCluster30)) * 100))
+        #
+        # # # Val Cluster
+        # attTmp = model.getAttribute(vX)
+        # tmpPredCluster = []
+        # for i in range(attTmp.shape[0]):
+        #     tmpPredCluster.append(FindCluster(attTmp[i], tmpConcatAtt.shape[0] - 1))
+        # tmpPredCluster = np.array(tmpPredCluster)
+        # print('Cluster Validation Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, vYCluster)) * 100))
+        #
+        # # Test Cluster
+        # attTmp = model.getAttribute(teX)
+        # tmpPredCluster = []
+        # for i in range(attTmp.shape[0]):
+        #     tmpPredCluster.append(FindCluster(attTmp[i], tmpConcatAtt.shape[0] - 1))
+        # tmpPredCluster = np.array(tmpPredCluster)
+        # print('Cluster Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, teYCluster)) * 100))
