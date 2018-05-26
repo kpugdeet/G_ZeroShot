@@ -71,7 +71,7 @@ class attribute (object):
             self.restoreModel()
 
     def restoreModel(self):
-        self.saver.restore(self.sess, globalV.FLAGS.BASEDIR + globalV.FLAGS.DIR + '/attribute/model/model.ckpt')
+        self.saver.restore(self.sess, globalV.FLAGS.BASEDIR + globalV.FLAGS.DIR + '/attribute/model/model.ckpt-80')
         npzFile = np.load(globalV.FLAGS.BASEDIR + globalV.FLAGS.DIR + '/attribute/model/checkpoint.npz')
         self.Start = npzFile['Start']
         self.Check = npzFile['Check']

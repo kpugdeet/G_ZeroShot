@@ -79,7 +79,8 @@ class classify (object):
 
     def trainClassify(self, att, y, keep=0.5):
         for i in range(self.Start, globalV.FLAGS.maxSteps + 1):
-            print('Loop {0}/{1}'.format(i, globalV.FLAGS.maxSteps))
+            if globalV.FLAGS.HEADER == 1:
+                print('Loop {0}/{1}'.format(i, globalV.FLAGS.maxSteps))
             # Train
             losses = []
             accuracies = []
@@ -95,7 +96,7 @@ class classify (object):
 
             if i % self.Check == 0:
                 savePath = self.saver.save(self.sess, globalV.FLAGS.BASEDIR + globalV.FLAGS.DIR + '/classify/model/model.ckpt',global_step=i)
-                print('Model saved in file: {0}'.format(savePath))
+                # print('Model saved in file: {0}'.format(savePath))
                 if i / self.Check == 10:
                     self.Check *= 10
 

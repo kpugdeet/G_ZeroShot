@@ -19,9 +19,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 # For plotting
 import plotly.plotly as py
 import plotly.graph_objs as go
-# py.sign_in('krittaphat.pug', 'oVTAbkhd2RQvodGOwrwp') # G-mail link
+py.sign_in('krittaphat.pug', 'oVTAbkhd2RQvodGOwrwp') # G-mail link
 # py.sign_in('amps1', 'Z1KAk8xiPUyO2U58JV2K') # kpugdeet@syr.edu/12345678
-py.sign_in('amps2', 'jGQHMBArdACog36YYCAI') # yli41@syr.edu/12345678
+# py.sign_in('amps2', 'jGQHMBArdACog36YYCAI') # yli41@syr.edu/12345678
 # py.sign_in('amps3', '5geLaNJlswmzDucmKikR') # liyilan0120@gmail.com/12345678
 
 
@@ -56,6 +56,8 @@ if __name__ == "__main__":
     # Choose what to do
     parser.add_argument('--OPT', type=int, default=0, help='1.Darknet, 2.Attribute, 3.Classify, 4.Accuracy')
     parser.add_argument('--SELATT', type=int, default=1, help='1.Att, 2.Word2Vec, 3.Att+Word2Vec')
+    parser.add_argument('--HEADER', type=int, default=0, help='0.Not-Show, 1.Show')
+    parser.add_argument('--SEED', type=int, default=0, help='0.Not-Show, 1.Show')
     globalV.FLAGS, _ = parser.parse_known_args()
 
     # Check Folder exist
@@ -70,18 +72,20 @@ if __name__ == "__main__":
         os.makedirs(globalV.FLAGS.BASEDIR + globalV.FLAGS.DIR + '/classify/model')
 
     # Load data
-    print('\nLoad Data for {0}'.format(globalV.FLAGS.KEY))
+    if globalV.FLAGS.HEADER == 1:
+        print('\nLoad Data for {0}'.format(globalV.FLAGS.KEY))
     (trainClass, trainAtt, trainVec, trainX, trainY, trainYAtt), (valClass, valAtt, valVec, valX, valY, valYAtt), (testClass, testAtt, testVec, testX, testY, testYAtt) = loadData.getData()
-    if globalV.FLAGS.KEY == 'SUN' or globalV.FLAGS.KEY == 'APY':
-        print('       {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format('numClass', 'classAtt', 'classVec','inputX', 'outputY', 'outputAtt'))
-        print('Train: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format(len(trainClass), str(trainAtt.shape), str(trainVec.shape), str(trainX.shape), str(trainY.shape), str(trainYAtt.shape)))
-        print('Valid: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format(len(valClass), str(valAtt.shape), str(valVec.shape), str(valX.shape), str(valY.shape), str(valYAtt.shape)))
-        print('Test:  {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format(len(testClass), str(testAtt.shape), str(testVec.shape), str(testX.shape), str(testY.shape), str(testYAtt.shape)))
-    else:
-        print('       {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format('numClass', 'classAtt', 'classVec','inputX', 'outputY'))
-        print('Train: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format(len(trainClass), str(trainAtt.shape), str(trainVec.shape), str(trainX.shape), str(trainY.shape)))
-        print('Valid: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format(len(valClass), str(valAtt.shape), str(valVec.shape), str(valX.shape), str(valY.shape)))
-        print('Test:  {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format(len(testClass), str(testAtt.shape), str(testVec.shape), str(testX.shape), str(testY.shape)))
+    if globalV.FLAGS.HEADER == 1:
+        if globalV.FLAGS.KEY == 'SUN' or globalV.FLAGS.KEY == 'APY':
+            print('       {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format('numClass', 'classAtt', 'classVec','inputX', 'outputY', 'outputAtt'))
+            print('Train: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format(len(trainClass), str(trainAtt.shape), str(trainVec.shape), str(trainX.shape), str(trainY.shape), str(trainYAtt.shape)))
+            print('Valid: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format(len(valClass), str(valAtt.shape), str(valVec.shape), str(valX.shape), str(valY.shape), str(valYAtt.shape)))
+            print('Test:  {0:>10} {1:>12} {2:>10} {3:>20} {4:>10} {5:>12}'.format(len(testClass), str(testAtt.shape), str(testVec.shape), str(testX.shape), str(testY.shape), str(testYAtt.shape)))
+        else:
+            print('       {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format('numClass', 'classAtt', 'classVec','inputX', 'outputY'))
+            print('Train: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format(len(trainClass), str(trainAtt.shape), str(trainVec.shape), str(trainX.shape), str(trainY.shape)))
+            print('Valid: {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format(len(valClass), str(valAtt.shape), str(valVec.shape), str(valX.shape), str(valY.shape)))
+            print('Test:  {0:>10} {1:>12} {2:>10} {3:>20} {4:>10}'.format(len(testClass), str(testAtt.shape), str(testVec.shape), str(testX.shape), str(testY.shape)))
 
     # Show class name that index with total classes
     def printClassName(pos):
@@ -185,12 +189,14 @@ if __name__ == "__main__":
 
 
     # Check where there is some class that has same attributes
-    print('\nCheck matching classes attributes')
-    for i in range(concatAtt_D.shape[0]):
-        for j in range(i + 1, concatAtt_D.shape[0]):
-            if np.array_equal(concatAtt_D[i], concatAtt_D[j]):
-                print('{0} {1}: {2} {3}'.format(i, printClassName(i), j, printClassName(j)))
-    print('')
+
+    if globalV.FLAGS.HEADER == 1:
+        print('\nCheck matching classes attributes')
+        for i in range(concatAtt_D.shape[0]):
+            for j in range(i + 1, concatAtt_D.shape[0]):
+                if np.array_equal(concatAtt_D[i], concatAtt_D[j]):
+                    print('{0} {1}: {2} {3}'.format(i, printClassName(i), j, printClassName(j)))
+        print('')
 
     # Build Tree
     distanceFunc = spatial.distance.euclidean
@@ -228,6 +234,13 @@ if __name__ == "__main__":
     recursiveAddEdges(tmpConcatAtt.shape[0]-1)
     dot.render('Tree.gv')
 
+    np.random.seed(globalV.FLAGS.SEED)
+    s = np.arange(trainX.shape[0])
+    np.random.shuffle(s)
+    trainX = trainX[s]
+    trainY = trainY[s]
+    trainYAtt = trainYAtt[s]
+
     # Split train data 70/30 for each class
     trX70 = None; trY70 = None; trAtt70 = None
     trX30 = None; trY30 = None; trAtt30 = None
@@ -261,10 +274,9 @@ if __name__ == "__main__":
             trAtt30 = np.concatenate((trAtt30, eachInputAtt[divEach:]), axis=0)
 
     # Balance training class
-    baX70 = None;
+    baX70 = None
     baAtt70 = None
     sampleEach = 500
-
     for z in range(len(trainClass)):
         eachInputX = []
         eachInputY = []
@@ -318,7 +330,6 @@ if __name__ == "__main__":
     # Balance testing class
     baTeX = None; baTeY = None; baTeAtt = None
     sampleEach = 150
-
     for z in range(20, 32):
         eachInputX = []
         eachInputY = []
@@ -331,7 +342,6 @@ if __name__ == "__main__":
         eachInputX = np.array(eachInputX)
         eachInputY = np.array(eachInputY)
         eachInputAtt = np.array(eachInputAtt)
-
         if baTeX is None:
             baTeX = eachInputX[:sampleEach]
             baTeY = eachInputY[:sampleEach]
@@ -341,13 +351,13 @@ if __name__ == "__main__":
             baTeY = np.concatenate((baTeY, eachInputY[:sampleEach]), axis=0)
             baTeAtt = np.concatenate((baTeAtt, eachInputAtt[:sampleEach]), axis=0)
 
-
-    print('Shuffle Data shape')
-    print(trX70.shape, trY70.shape, trAtt70.shape)
-    print(trX30.shape, trY30.shape, trAtt30.shape)
-    print(vX.shape, vY.shape, vAtt.shape)
-    print(teX.shape, teY.shape, teAtt.shape)
-    print(baX70.shape, baAtt70.shape)
+    if globalV.FLAGS.HEADER == 1:
+        print('Shuffle Data shape')
+        print(trX70.shape, trY70.shape, trAtt70.shape)
+        print(trX30.shape, trY30.shape, trAtt30.shape)
+        print(vX.shape, vY.shape, vAtt.shape)
+        print(teX.shape, teY.shape, teAtt.shape)
+        print(baX70.shape, baAtt70.shape)
 
     # Get all Classes name and attribute name
     allClassName = np.concatenate((np.concatenate((trainClass, valClass), axis=0), testClass), axis=0)
@@ -375,8 +385,30 @@ if __name__ == "__main__":
 
     elif globalV.FLAGS.OPT == 3:
         print('\nTrain Classify')
+        tmpAttributes = concatAtt_D.copy()
+        tmpClassIndex = np.arange(concatAtt_D.shape[0])
+        numberOfSample = 39
+        for i in range (globalV.FLAGS.numClass):
+            if i < 12:
+                countSample = 0
+                for j in range(trX30.shape[0]):
+                    if trY30[j] == i:
+                        tmpAttributes = np.concatenate((tmpAttributes, np.expand_dims(trAtt30[j], axis=0)), axis=0)
+                        tmpClassIndex = np.concatenate((tmpClassIndex, np.expand_dims(i, axis=0)), axis=0)
+                        countSample += 1
+                    if countSample == numberOfSample:
+                        break
+            else:
+                for j in range(numberOfSample):
+                    tmpAttributes = np.concatenate((tmpAttributes, np.expand_dims(concatAtt_D[i], axis=0)), axis=0)
+                    tmpClassIndex = np.concatenate((tmpClassIndex, np.expand_dims(i, axis=0)), axis=0)
+
+        print(tmpAttributes.shape)
+        print(tmpClassIndex.shape)
+
         classifier = classify()
-        classifier.trainClassify(concatAtt_D, np.arange(concatAtt_D.shape[0]), 0.5)
+        # classifier.trainClassify(concatAtt_D, np.arange(concatAtt_D.shape[0]), 0.5)
+        classifier.trainClassify(tmpAttributes, tmpClassIndex, 0.5)
 
     # Predict classes
     elif globalV.FLAGS.OPT == 4:
@@ -1329,7 +1361,8 @@ if __name__ == "__main__":
 
     # Predict cluster index + classes
     elif globalV.FLAGS.OPT == 9:
-        print('\nMode: 9 Predict Classes from cluster')
+        if globalV.FLAGS.HEADER == 1:
+            print('\nMode: 9 Predict Classes from cluster')
 
         mapAll = [1, 1, 2, 2, 0, 0, 0, 3, 4, 6, 5, 7, 8, 9, 5, 1, 2, 0, 3, 5, 1, 2, 0, 0, 0, 0, 3, 4, 6, 5, 5, 0]
 
@@ -1395,12 +1428,18 @@ if __name__ == "__main__":
                             break
                         if countTop == 1:
                             break
-        print(countCorrect)
-        print(tmpPredCluster.shape[0])
+        # print(countCorrect)
+        # print(tmpPredCluster.shape[0])
         print('Cluster Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, trYCluster30)) * 100))
         print('Classes Train Accuracy = {0:.4f}%'.format((countCorrect/tmpPredCluster.shape[0])*100))
         predY = classifier.predict(tmpAtt)
         print('Train Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, trY30)) * 100))
+        countCorrect = 0
+        for i in range(predY.shape[0]):
+            if mapAll[predY[i]] == mapAll[trY30[i]]:
+                countCorrect += 1
+        print('Check predY has same cluster Train Accuracy = {0:.4f}%'.format((countCorrect/predY.shape[0])*100))
+
 
         tmpAtt = model.getAttribute(vX)
         tmpScore = classifier.predictScore(tmpAtt)
@@ -1421,12 +1460,17 @@ if __name__ == "__main__":
                             break
                         if countTop == 1:
                             break
-        print(countCorrect)
-        print(tmpPredCluster.shape[0])
+        # print(countCorrect)
+        # print(tmpPredCluster.shape[0])
         print('Cluster Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, vYCluster)) * 100))
         print('Classes Val Accuracy = {0:.4f}%'.format((countCorrect / tmpPredCluster.shape[0]) * 100))
         predY = classifier.predict(tmpAtt)
         print('Val Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, vY)) * 100))
+        countCorrect = 0
+        for i in range(predY.shape[0]):
+            if mapAll[predY[i]] == mapAll[vY[i]]:
+                countCorrect += 1
+        print('Check predY has same cluster Val Accuracy = {0:.4f}%'.format((countCorrect / predY.shape[0]) * 100))
 
         tmpAtt = model.getAttribute(teX)
         tmpScore = classifier.predictScore(tmpAtt)
@@ -1447,12 +1491,17 @@ if __name__ == "__main__":
                             break
                         if countTop == 1:
                             break
-        print(countCorrect)
-        print(tmpPredCluster.shape[0])
+        # print(countCorrect)
+        # print(tmpPredCluster.shape[0])
         print('Cluster Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(tmpPredCluster, teYCluster)) * 100))
         print('Classes Test Accuracy = {0:.4f}%'.format((countCorrect / tmpPredCluster.shape[0]) * 100))
         predY = classifier.predict(tmpAtt)
         print('Test Accuracy = {0:.4f}%'.format(np.mean(np.equal(predY, teY)) * 100))
+        countCorrect = 0
+        for i in range(predY.shape[0]):
+            if mapAll[predY[i]] == mapAll[teY[i]]:
+                countCorrect += 1
+        print('Check predY has same cluster Test Accuracy = {0:.4f}%'.format((countCorrect / predY.shape[0]) * 100))
 
 
         # # Train Cluster
